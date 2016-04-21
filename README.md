@@ -1,6 +1,6 @@
 # Gain
 
-A 32-bit stereo VST plugin. See "Releases" for a pre-built binary.
+A 32-bit stereo VST plugin. See Releases for a pre-built binary.
 
 This is one of the simplest useful plugins that can be designed. The purpose of creating such a simple plugin is twofold. First, it was an exercise in using the JUCE interface for writing the software, and secondly, it solidified my understanding of the mathematics behind gain, which is an extremely common DSP operation that forms a fundamental part of other processes and effects.
 
