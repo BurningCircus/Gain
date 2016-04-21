@@ -232,15 +232,40 @@ AudioProcessorEditor* GainAudioProcessor::createEditor()
 //==============================================================================
 void GainAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    //Idea sourced from the JUCE demo plugin; original implementation.
+    //Hopefully I can create something maintenance-free.
+    
+    //Create the root XML node/element.
+    XmlElement xml("GAINSETTINGS");
+    
+    //Set attributes.
+    for(int i = 0; i < totalNumParam; ++i) {
+        xml.setAttribute(getParameterName(i), getParameter(i));
+    }
+    
+    //Dump to the given memory block.
+    copyXmlToBinary(xml, destData);
 }
 
 void GainAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    //Code sourced from the JUCE demo plugin with minor modifications.
+    
+    //Retrieve the XML information
+    ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+    
+    //Parse it all out.
+    if(xmlState != nullptr) {
+        //Make sure that we've got the right data.
+        if(xmlState->hasTagName("GAINSETTINGS")) {
+            //Pull information and push it to our plugin.
+            for(int i = 0; i < totalNumParam; ++i) {
+                setParameter(i, (float) xmlState->getDoubleAttribute(getParameterName(i), getParameter(i)));
+            }
+        }
+    }
+    
+    RequestUIUpdate();
 }
 
 //==============================================================================

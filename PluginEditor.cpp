@@ -71,7 +71,7 @@ GainAudioProcessorEditor::GainAudioProcessorEditor (GainAudioProcessor& ownerFil
     startTimer(30);
 
     //Set double-click return values
-    GainSld->SetDoubleClickReturnValue(true, 0);
+    GainSld->setDoubleClickReturnValue(true, 0);
 
     //Force a parameter reset upon re-opening.
     ownerFilter.RequestUIUpdate();
@@ -136,7 +136,7 @@ void GainAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 
         //Update the gain value. We use a logarithmic scale here to get everything from
         //dB to "computer-language" gain levels (linear power scaling) for ease of use.
-        ourProcessor->setParameter(GainAudioProcessor::gain, (float) pow(10, .05*GainSld->getValue()));
+        ourProcessor->setParameter(GainAudioProcessor::gain, (float) sqrt(pow(10, .1*GainSld->getValue())));
         //[/UserSliderCode_GainSld]
     }
 
@@ -192,7 +192,7 @@ void GainAudioProcessorEditor::timerCallback() {
 
         //Update GainSld's state. We use a logarithmic scale here to get everything from
         //"computer-language" gain levels (linear power scaling) to dB for ease of use.
-        GainSld->setValue(20*log10((float) ourProcessor->getParameter(GainAudioProcessor::gain)), dontSendNotification);
+        GainSld->setValue(10*log10((float) pow(ourProcessor->getParameter(GainAudioProcessor::gain), 2)), dontSendNotification);
 
         //We're done and can clear the UI Update Flag.
         ourProcessor->ClearUIUpdateFlag();

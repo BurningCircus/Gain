@@ -4,6 +4,8 @@
    Developed by Zach Hummel using JUCE
    9/29/15 */
 
+#include <math.h>
+
 class Gain {
 public:
 	//Constructor/destructor
